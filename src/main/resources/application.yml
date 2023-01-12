@@ -1,0 +1,14 @@
+spring:
+  data:
+    mongodb:
+      authentication-database: admin
+      username: admin
+      database: apirest
+      password: admin
+      port: '27017'
+      host: localhost
+  profiles:
+    active: local
+  jpa:
+    hibernate:
+      ddl-auto: create
