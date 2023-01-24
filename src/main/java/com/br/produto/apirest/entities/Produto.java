@@ -1,10 +1,20 @@
 package com.br.produto.apirest.entities;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Document
+@Builder
 public class Produto {
 
     private String id;
@@ -17,54 +27,27 @@ public class Produto {
 
     private double risco;
 
-    public Produto() {
-    }
-
-    public Produto(String id, long codigo, String nome, List<ClasseInvestimento> classesInvestimento, double risco) {
-        this.id = id;
-        this.codigo = codigo;
-        this.nome = nome;
-        this.classesInvestimento = classesInvestimento;
-        this.risco = risco;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public long getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(long codigo) {
-        this.codigo = codigo;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public List<ClasseInvestimento> getClassesInvestimento() {
-        return classesInvestimento;
-    }
-
-    public void setClassesInvestimento(List<ClasseInvestimento> classesInvestimento) {
-        this.classesInvestimento = classesInvestimento;
-    }
-
     public double getRisco() {
-        return risco;
+        if (classesInvestimento == null) {
+            return 0.0;
+        }
+        List<ClasseInvestimento> classeInvestimentoValida = classesInvestimento.stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        if (classeInvestimentoValida.isEmpty()) {
+            return 0.0;
+        }
+
+        return classeInvestimentoValida.stream()
+                .mapToDouble(this::getRisco)
+                .sum() / classeInvestimentoValida.size();
     }
 
-    public void setRisco(double risco) {
-        this.risco = risco;
+    private double getRisco(ClasseInvestimento classeInvestimento) {
+        if (classeInvestimento.getRisco() == null) {
+            return 0.0;
+        }
+        return classeInvestimento.getRisco();
     }
 }
