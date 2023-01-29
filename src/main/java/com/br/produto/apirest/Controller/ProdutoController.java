@@ -1,7 +1,6 @@
 package com.br.produto.apirest.Controller;
 
 import com.br.produto.apirest.entities.Produto;
-import com.br.produto.apirest.repositories.ProdutoRepository;
 import com.br.produto.apirest.services.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
