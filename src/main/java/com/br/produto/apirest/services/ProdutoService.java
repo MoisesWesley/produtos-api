@@ -25,22 +25,24 @@ public class ProdutoService {
 
     public Produto findByCodigo(long codigo) {
         Optional<Produto> produto = produtoRepository.findByCodigo(codigo);
-        return produto.orElseThrow(() -> new ResourceNotFoundException("Registro nao encontrado"));
+        return produto.orElseThrow(() -> new ResourceNotFoundException("Registro não encontrado"));
     }
 
     public Produto salvarProduto(Produto produto) {
+        produto.isValid();
         if (produtoRepository.findByCodigo(produto.getCodigo()).isPresent()) {
-            throw new ResourceNotFoundException("Produto ja existe.");
+            throw new ResourceNotFoundException("Produto já existe.");
         }
         return produtoRepository.save(produto);
     }
 
     @Transactional
     public Produto atualizarProduto(long codigo, Produto produto) {
+        produto.isValid();
         if (produtoRepository.findByCodigo(codigo).isPresent()) {
             return produtoRepository.save(produto);
         }
-        throw new ResourceNotFoundException("Impossivel atualizar produto nao existe ou codigo invalido");
+        throw new ResourceNotFoundException("Impossivel atualizar produto inexistente");
     }
 
     public void deleteByCodigoProduto(long codigo) {

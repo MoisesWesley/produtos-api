@@ -1,5 +1,6 @@
 package com.br.produto.apirest.entities;
 
+import com.br.produto.apirest.services.exceptions.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -49,5 +50,12 @@ public class Produto {
             return 0.0;
         }
         return classeInvestimento.getRisco();
+    }
+
+    public boolean isValid() {
+        if (codigo > 0 && nome != null && !nome.isEmpty()) {
+            return true;
+        }
+        throw new ResourceNotFoundException("Os campos codigo e nome não podem ser nulos ou vazios");
     }
 }

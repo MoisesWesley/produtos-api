@@ -17,8 +17,14 @@ public class ProdutoController {
     private ProdutoService produtoService;
 
     @GetMapping
-    public List<Produto> listarProduto() {
+    public List<Produto> listarProdutos() {
         return produtoService.buscarProdutos();
+    }
+
+    @GetMapping("/{codigo}")
+    public ResponseEntity<Produto> listarProdutoPorCodigo(@PathVariable long codigo) {
+       Produto produto = produtoService.findByCodigo(codigo);
+       return ResponseEntity.ok().body(produto);
     }
 
     @PostMapping
